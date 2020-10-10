@@ -118,7 +118,8 @@ while True:
     #Press any button to start 
     while(GPIO.input(buttons[0]) or GPIO.input(buttons[1]) or GPIO.input(buttons[2]) or GPIO.input(buttons[3]) or GPIO.input(buttons[4])):
         #Show some standart sequence
-        flag(0.5)    
+        flag(0.5)
+        blink_all(0.5)
         #flag game_started
         game_started = True
         #Game loop
