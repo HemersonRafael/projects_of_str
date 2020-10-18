@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 #
-# AUTHOR: IRAN MACEDO AND RICARDO CAVALCANTI 31/08/2018
+# AUTHOR:  HEMERSON RAFAEL AND RAFAEL GARCIA 06/10/2020
 #
-# THIS GAME WAS MADE FOR ME (@IRANNETO) AND @RICAVALCANTI AT UFRN AT THE COURSE OF REAL-TIME SYSTEMS
 # 
-# UPDATING: HEMERSON RAFAEL AND RAFAEL GARCIA 06/10/2020
-# THIS VERSION REMOVE BUGS, ADDING THE BIPES TOGETHER  THE LEDS AND REFACTORY
-#
+
 
 import Adafruit_BBIO.GPIO as GPIO
 import Adafruit_BBIO.PWM as PWM
@@ -24,6 +21,7 @@ game_sequence = []
 player_sequence = []
 
 current_round = 1
+current_time = 0
 game_started = False
 
 for x in range(5):
@@ -60,9 +58,9 @@ def generate_current_round():
     current_led = random.randint(0,3)
     game_sequence.append(current_led)
     for count in game_sequence:
-        blink_bipe(musical_notes[count], leds[count],0.5)
+        blink_bipe(musical_notes[count], leds[count],0.5 - (current_round * 0.01))
         #add leds in the sequence 
-        #    
+         
 def click(num):
     player_sequence.append(num)
     print("B"+ str(num))
@@ -75,8 +73,9 @@ def get_play():
     number_of_plays = 0
     play_time_begin = time.time() #Return the number of seconds since epoch
     play_time_end = time.time()
+    current_time = play_time_end - play_time_begin
     # Player got 3 seconds for every led in the sequence on every round 
-    while((play_time_end - play_time_begin) < current_round + 3):
+    while( current_time < current_round + 3):
 
         if(GPIO.input(buttons[0])):
             click(0)
@@ -95,7 +94,9 @@ def get_play():
             number_of_plays += 1
 
         play_time_end = time.time()
+        current_time = play_time_end - play_time_begin
         if(number_of_plays == current_round):
+            print("Time react: {}".format(current_time))
             break
     if(number_of_plays < current_round):
         print("Game Over")
@@ -118,13 +119,13 @@ while True:
     #Press any button to start 
     while(GPIO.input(buttons[0]) or GPIO.input(buttons[1]) or GPIO.input(buttons[2]) or GPIO.input(buttons[3]) or GPIO.input(buttons[4])):
         #Show some standart sequence
-        flag(0.5)
-        blink_all(0.5)
+        flag(0.25)
+        blink_all(0.25)
         #flag game_started
         game_started = True
         #Game loop
         while game_started:
-            print("Round: " + str(current_round))
+            print("Round: {}".format(current_round))
             generate_current_round()    
             
             #Detect player's play
@@ -142,9 +143,14 @@ while True:
                 player_sequence = []
                 current_round = 0
                 game_started = False
-
-            blink_all(0.5)
+            
+            blink_all(0.25)
             current_round += 1
+            print("_______________________________________________\n")
+            
+
+            
+            
         os.system("reset")
         print("__________________Game Genius__________________\n")
         print("Press any button to start\n")
