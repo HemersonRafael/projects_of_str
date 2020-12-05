@@ -121,28 +121,28 @@ def train1_function():
             time.sleep(adc)
             if l == 3:
                 if (mutex_l3.locked() or mutex_l6.locked()) and debug:
-                    print('t1 esperando l3 ficar livre')
+                    print('t1 waiting l3 stay free')
                 while mutex_l3.locked() or mutex_l6.locked():
                     pass
                 if debug:
-                    print('t1 encontrou l3 livre')
+                    print('t1 found l3 free')
                 mutex_l3.acquire()
             if l == 4:
                 if mutex_l4.locked() and debug:
-                    print('t1 esperando l4 ficar livre')
+                    print('t1 waiting l4 stay free')
                 while mutex_l4.locked() == True:
                     pass
                 if debug:
-                    print('t1 encontrou l4 livre')
+                    print('t1 found l4 free')
                 mutex_l4.acquire()
                 if mutex_l3.locked():
                     if debug:
-                        print('t1 liberou l3')
+                        print('t1 released l3')
                     mutex_l3.release()
             if l == 1:
                 if mutex_l4.locked():
                     if debug:
-                        print('t1 liberou l4')
+                        print('t1 released l4')
                     mutex_l4.release()
             print('t1: ' + str(l))
             if l == 1:
@@ -163,40 +163,40 @@ def train2_function():
             time.sleep(adc)
             if l == 3:
                 if mutex_l3.locked() and debug:
-                    print('t2 esperando l3 ficar livre')
+                    print('t2 waiting l3 stay free')
                 while mutex_l3.locked() == True:
                     pass
                 if debug:
-                    print('t2 encontrou l3 livre')
+                    print('t2 found l3 free')
                 mutex_l3.acquire()
                 if mutex_l6.locked():
                     if debug:
-                        print('t2 liberou l6')
+                        print('t2 released l6')
                     mutex_l6.release()
             if l == 6:
                 if (mutex_l6.locked() or mutex_l3.locked() or mutex_l4.locked()) and debug:
-                    print('t2 esperando l6 ficar livre')
+                    print('t2 waiting l6 stay free')
                 while mutex_l6.locked() or mutex_l3.locked() or mutex_l4.locked():
                     pass
                 if debug:
-                    print('t2 encontrou l6 livre')
+                    print('t2 found l6 free')
                 mutex_l6.acquire()
                 if mutex_l5.locked():
                     if debug:
-                        print('t2 liberou l5')
+                        print('t2 released l5')
                     mutex_l5.release()
             if l == 5:
                 if (mutex_l5.locked() or mutex_l10.locked()) and debug:
-                    print('t2 esperando l5 ficar livre')
+                    print('t2 waiting l5 stay free')
                 while mutex_l5.locked() or mutex_l10.locked():
                     pass
                 if debug:
-                    print('t2 encontrou l5 livre')
+                    print('t2 found l5 free')
                 mutex_l5.acquire()
             if l == 7:
                 if mutex_l3.locked():
                     if debug:
-                        print('t2 liberou l3')
+                        print('t2 released l3')
                     mutex_l3.release()
             print('t2: ' + str(l))
             if l == 3:
@@ -217,28 +217,28 @@ def train3_function():
             time.sleep(adc)
             if l == 5:
                 if mutex_l5.locked() and debug:
-                    print('t3 esperando l5 ficar livre')
+                    print('t3 waiting l5 stay free')
                 while mutex_l5.locked() == True:
                     pass
                 if debug:
-                    print('t3 encontrou l5 livre')
+                    print('t3 found l5 free')
                 mutex_l5.acquire()
                 if mutex_l10.locked():
                     if debug:
-                        print('t3 liberou l10')
+                        print('t3 released l10')
                     mutex_l10.release()
             if l == 10:
                 if (mutex_l10.locked() or mutex_l5.locked() or mutex_l6.locked() or mutex_l4.locked()) and debug:
-                    print('t3 esperando l10 ficar livre')
+                    print('t3 waiting l10 stay free')
                 while mutex_l10.locked() or mutex_l5.locked() or mutex_l6.locked() or mutex_l4.locked():
                     pass
                 if debug:
-                    print('t3 encontrou l10 livre')
+                    print('t3 found l10 free')
                 mutex_l10.acquire()
             if l == 8:
                 if mutex_l5.locked():
                     if debug:
-                        print('t3 liberou l5')
+                        print('t3 released l5')
                     mutex_l5.release()
             print('t3: ' + str(l))
             if l == 5:
@@ -259,40 +259,40 @@ def train4_function():
             time.sleep(adc)
             if l == 4:
                 if mutex_l4.locked() and debug:
-                    print('t4 esperando l4 ficar livre')
+                    print('t4 waiting l4 stay free')
                 while mutex_l4.locked() == True:
                     pass
                 if debug:
-                    print('t4 encontrou l4 livre')
+                    print('t4 found l4 free')
                 mutex_l4.acquire()
             if l == 6:
                 if mutex_l6.locked() and debug:
-                    print('t4 esperando l6 ficar livre')
+                    print('t4 waiting l6 stay free')
                 while mutex_l6.locked() == True:
                     pass
                 if debug:
-                    print('t4 encontrou l6 livre')
+                    print('t4 found l6 free')
                 mutex_l6.acquire()
                 if mutex_l4.locked():
                     if debug:
-                        print('t4 liberou l4')
+                        print('t4 released l4')
                     mutex_l4.release()
             if l == 10:
                 if mutex_l10.locked() and debug:
-                    print('t4 esperando l10 ficar livre')
+                    print('t4 waiting l10 stay free')
                 while mutex_l10.locked() == True:
                     pass
                 if debug:
-                    print('t4 encontrou l10 livre')
+                    print('t4 found l10 free')
                 mutex_l10.acquire()
                 if mutex_l6.locked():
                     if debug:
-                        print('t4 liberou l6')
+                        print('t4 released l6')
                     mutex_l6.release()
             if l == 12:
                 if mutex_l10.locked():
                     if debug:
-                        print('t4 liberou l10')
+                        print('t4 released l10')
                     mutex_l10.release()
             print('t4: ' + str(l)) 
             if l == 13:
