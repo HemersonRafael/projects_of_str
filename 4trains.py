@@ -4,7 +4,16 @@ import Adafruit_BBIO.GPIO as GPIO
 import Adafruit_BBIO.ADC as ADC
 import time
 import sys
+import logging
 
+
+
+log_format = "(%(threadName)-9s) %(asctime)s %(levelname)s %(name)s::"\
+             "%(filename)s::%(lineno)d::%(message)s"
+logging.basicConfig(level=logging.DEBUG, format=log_format,
+                    handlers=[logging.StreamHandler()])
+
+logger = logging.getLogger(__name__)
 
 ADC.setup()
 
@@ -15,7 +24,7 @@ mutex_l6 = Lock()
 mutex_l10 = Lock()
 
 debug = 0
-adc = 0.5
+velocity = 0.5
 
 rail_1 = [1,2,3,4]
 rail_2 = [7,5,6,3]
@@ -26,6 +35,7 @@ led_rail_1 = ["P8_11","P8_12","P8_14","P8_15"]
 led_rail_2 = ["P8_16","P8_17","P8_18","P8_26"]
 led_rail_3 = ["P9_12","P9_17","P9_18","P9_41"]
 led_rail_4 = ["P8_25","P8_20","P9_23","P9_15","P9_27","P8_30"]
+
 
 def set_gpio_out(pins):
     for pin in pins:
@@ -114,37 +124,36 @@ def led_on_sequence_six(pins, s_type):
 
 
 def train1_function():
-    global adc
-
+    
     while True:
         for l in rail_1:
-            time.sleep(adc)
+            time.sleep(velocity)
             if l == 3:
                 if (mutex_l3.locked() or mutex_l6.locked()) and debug:
-                    print('t1 waiting l3 stay free')
+                    logger.debug('t1 waiting l3 stay free')
                 while mutex_l3.locked() or mutex_l6.locked():
                     pass
                 if debug:
-                    print('t1 found l3 free')
+                    logger.debug('t1 found l3 free')
                 mutex_l3.acquire()
             if l == 4:
                 if mutex_l4.locked() and debug:
-                    print('t1 waiting l4 stay free')
+                    logger.debug('t1 waiting l4 stay free')
                 while mutex_l4.locked() == True:
                     pass
                 if debug:
-                    print('t1 found l4 free')
+                    logger.debug('t1 found l4 free')
                 mutex_l4.acquire()
                 if mutex_l3.locked():
                     if debug:
-                        print('t1 released l3')
+                        logger.debug('t1 released l3')
                     mutex_l3.release()
             if l == 1:
                 if mutex_l4.locked():
                     if debug:
-                        print('t1 released l4')
+                        logger.debug('t1 released l4')
                     mutex_l4.release()
-            print('t1: ' + str(l))
+            logger.debug('t1: ' + str(l))
             if l == 1:
                 led_on_sequence_four(led_rail_1, "HLLL")
             if l == 2:
@@ -156,49 +165,48 @@ def train1_function():
 
 
 def train2_function():
-    global adc
 
     while True:
         for l in rail_2:
-            time.sleep(adc)
+            time.sleep(velocity)
             if l == 3:
                 if mutex_l3.locked() and debug:
-                    print('t2 waiting l3 stay free')
+                    logger.debug('t2 waiting l3 stay free')
                 while mutex_l3.locked() == True:
                     pass
                 if debug:
-                    print('t2 found l3 free')
+                    logger.debug('t2 found l3 free')
                 mutex_l3.acquire()
                 if mutex_l6.locked():
                     if debug:
-                        print('t2 released l6')
+                        logger.debug('t2 released l6')
                     mutex_l6.release()
             if l == 6:
                 if (mutex_l6.locked() or mutex_l3.locked() or mutex_l4.locked()) and debug:
-                    print('t2 waiting l6 stay free')
+                    logger.debug('t2 waiting l6 stay free')
                 while mutex_l6.locked() or mutex_l3.locked() or mutex_l4.locked():
                     pass
                 if debug:
-                    print('t2 found l6 free')
+                    logger.debug('t2 found l6 free')
                 mutex_l6.acquire()
                 if mutex_l5.locked():
                     if debug:
-                        print('t2 released l5')
+                        logger.debug('t2 released l5')
                     mutex_l5.release()
             if l == 5:
                 if (mutex_l5.locked() or mutex_l10.locked()) and debug:
-                    print('t2 waiting l5 stay free')
+                    logger.debug('t2 waiting l5 stay free')
                 while mutex_l5.locked() or mutex_l10.locked():
                     pass
                 if debug:
-                    print('t2 found l5 free')
+                    logger.debug('t2 found l5 free')
                 mutex_l5.acquire()
             if l == 7:
                 if mutex_l3.locked():
                     if debug:
-                        print('t2 released l3')
+                        logger.debug('t2 released l3')
                     mutex_l3.release()
-            print('t2: ' + str(l))
+            logger.debug('t2: ' + str(l))
             if l == 3:
                 led_on_sequence_four(led_rail_2, "HLLL")
             if l == 7:
@@ -210,37 +218,36 @@ def train2_function():
 
 
 def train3_function():
-    global adc
 
     while True:
         for l in rail_3:
-            time.sleep(adc)
+            time.sleep(velocity)
             if l == 5:
                 if mutex_l5.locked() and debug:
-                    print('t3 waiting l5 stay free')
+                    logger.debug('t3 waiting l5 stay free')
                 while mutex_l5.locked() == True:
                     pass
                 if debug:
-                    print('t3 found l5 free')
+                    logger.debug('t3 found l5 free')
                 mutex_l5.acquire()
                 if mutex_l10.locked():
                     if debug:
-                        print('t3 released l10')
+                        logger.debug('t3 released l10')
                     mutex_l10.release()
             if l == 10:
                 if (mutex_l10.locked() or mutex_l5.locked() or mutex_l6.locked() or mutex_l4.locked()) and debug:
-                    print('t3 waiting l10 stay free')
+                    logger.debug('t3 waiting l10 stay free')
                 while mutex_l10.locked() or mutex_l5.locked() or mutex_l6.locked() or mutex_l4.locked():
                     pass
                 if debug:
-                    print('t3 found l10 free')
+                    logger.debug('t3 found l10 free')
                 mutex_l10.acquire()
             if l == 8:
                 if mutex_l5.locked():
                     if debug:
-                        print('t3 released l5')
+                        logger.debug('t3 released l5')
                     mutex_l5.release()
-            print('t3: ' + str(l))
+            logger.debug('t3: ' + str(l))
             if l == 5:
                 led_on_sequence_four(led_rail_3, "HLLL")
             if l == 8:
@@ -252,49 +259,48 @@ def train3_function():
 
 
 def train4_function():
-    global adc
 
     while True:
         for l in rail_4:
-            time.sleep(adc)
+            time.sleep(velocity)
             if l == 4:
                 if mutex_l4.locked() and debug:
-                    print('t4 waiting l4 stay free')
+                    logger.debug('t4 waiting l4 stay free')
                 while mutex_l4.locked() == True:
                     pass
                 if debug:
-                    print('t4 found l4 free')
+                    logger.debug('t4 found l4 free')
                 mutex_l4.acquire()
             if l == 6:
                 if mutex_l6.locked() and debug:
-                    print('t4 waiting l6 stay free')
+                    logger.debug('t4 waiting l6 stay free')
                 while mutex_l6.locked() == True:
                     pass
                 if debug:
-                    print('t4 found l6 free')
+                    logger.debug('t4 found l6 free')
                 mutex_l6.acquire()
                 if mutex_l4.locked():
                     if debug:
-                        print('t4 released l4')
+                        logger.debug('t4 released l4')
                     mutex_l4.release()
             if l == 10:
                 if mutex_l10.locked() and debug:
-                    print('t4 waiting l10 stay free')
+                    logger.debug('t4 waiting l10 stay free')
                 while mutex_l10.locked() == True:
                     pass
                 if debug:
-                    print('t4 found l10 free')
+                    logger.debug('t4 found l10 free')
                 mutex_l10.acquire()
                 if mutex_l6.locked():
                     if debug:
-                        print('t4 released l6')
+                        logger.debug('t4 released l6')
                     mutex_l6.release()
             if l == 12:
                 if mutex_l10.locked():
                     if debug:
-                        print('t4 released l10')
+                        logger.debug('t4 released l10')
                     mutex_l10.release()
-            print('t4: ' + str(l)) 
+            logger.debug('t4: ' + str(l)) 
             if l == 13:
                 led_on_sequence_six(led_rail_4,"HLLLLL")
             if l == 11:
@@ -311,8 +317,7 @@ def train4_function():
 
 def read_ADC_function():
     while True:
-        global adc
-        adc = ADC.read("P9_40")
+        velocity = ADC.read("P9_40")
         time.sleep(0.1)
 
 def main():
