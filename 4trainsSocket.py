@@ -136,9 +136,6 @@ def train1_function():
     while True:
         for l in rail_1:
             time.sleep(VELOCITY[0])
-            print("_________________________\n\n")
-            print(VELOCITY[0])
-            print("\n\n\_________________________")
             if l == 3:
                 if (mutex_l3.locked() or mutex_l6.locked()) and debug:
                     logger.debug('t1 waiting l3 stay free')
@@ -344,12 +341,6 @@ def getValuesBySocket():
     logger.info('Finalizando conexao do cliente' + str(cliente))
     con.close()
         
-def read_ADC_function():
-    while True:
- 
-        VELOCITY[0] = ADC.read("P9_40")
-        time.sleep(0.1)
-
 def main():
     t1 = Thread(target = train1_function)
     t1.start()
@@ -361,8 +352,6 @@ def main():
     t4.start()
     t5 = Thread(target = getValuesBySocket)
     t5.start()
-
-    #getValuesBySocket()
 
 if __name__ == '__main__':
     main()
